@@ -15,23 +15,41 @@ def _call(endpoint: str, payload: dict) -> dict:
         }
 
     url = BASE_URL + endpoint
-    
+
     return requests.get(url, headers=headers, params=payload).json()    # TODO: implement retry logic and error handling
 
 
-def something(id_arr: list) -> dict:
-    payload = {'id': ','.join(map(lambda i: str(i), [1,2,3]))}
-    res = _call('/v1/cryptocurrency/quotes/latest', payload=payload)
+def quotes(id_arr: list) -> dict:
+    """Returns the latest market quote for 1 or more cryptocurrencies
+    
+    Arguments:
+    id_arr -- array ids to fetch quotes info
+
+    https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyQuotesLatest
+    """
+
+    payload = {'id': ','.join(map(lambda i: str(i), id_arr))}
+    data = _call('/v1/cryptocurrency/quotes/latest', payload=payload)
+
+    res = {}
+
+    for key, record in data['data'].items():
+        res[key] = { field:value 
+                        for field, value in record['quote']['USD'].items()
+                        if field in [
+                                    'price', 'percent_change_24h', 'percent_change_7d', 
+                                    'percent_change_30d', 'percent_change_60d', 
+                                    'percent_change_90d', 'market_cap'
+                                    ]
+                    }   # lmao
+
     return res
 
 
-def main():
-    # pprint(_call('/v1/cryptocurrency/map'))
-    # pprint(_call('/v1/cryptocurrency/info?id=1'))    # Let's see xd     - nothing useful here
-    id_arr = [1, 2, 3]  # random ids
-    pprint(something(id_arr))
-    
-
+def main():    
+    id_arr = [1]  # random ids (BTC, LTC, NMC) NMC? namecoin
+    pprint(quotes(id_arr))
+   
 
 if __name__ == "__main__":
     main()
