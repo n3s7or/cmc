@@ -1,3 +1,5 @@
+import backoff
+from settings import logger
 from . import _call
 
 
@@ -11,11 +13,15 @@ def quotes(id_arr: list) -> list:
     """
 
     payload = {'id': ','.join(map(lambda i: str(i), id_arr))}
-    data = _call('/v1/cryptocurrency/quotes/latest', payload=payload)
+    json_response = _call('/v1/cryptocurrency/quotes/latest', payload=payload).json()
 
     res = []
+    
+    if 'data' not in json_response:
+        logger.info('Returning empty list, probably error fetching data')
+        return res    
 
-    for key, record in data['data'].items():
+    for key, record in json_response['data'].items():
         crypto = { field:value 
                         for field, value in record['quote']['USD'].items()
                         if field in [
