@@ -12,11 +12,15 @@ def quotes(id_arr: list) -> list:
     https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyQuotesLatest
     """
 
+    res = []
+    
+    if len(id_arr) == 0:
+        logger.warning('Empty id list provided, returning empty list.')
+        return res
+
     payload = {'id': ','.join(map(lambda i: str(i), id_arr))}
     json_response = _call('/v1/cryptocurrency/quotes/latest', payload=payload).json()
 
-    res = []
-    
     if 'data' not in json_response:
         logger.info('Returning empty list, probably error fetching data')
         return res    

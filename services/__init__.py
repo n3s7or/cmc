@@ -7,7 +7,7 @@ from settings import logger, BASE_URL, API_KEY
 
 def check_cmc_status(response: requests.Response):
     response_data = response.json()
-    
+
     if response.status_code == requests.codes.too_many_requests:
         logger.info("[%s]-%s on request to %s".format(
                                                     response.status_code,
@@ -17,7 +17,7 @@ def check_cmc_status(response: requests.Response):
         return True
 
     if response.status_code in [codes.bad, codes.unauthorized, codes.payment_required, codes.forbidden, codes.server_error]:
-        logger.warning("[%s]-%s on request to %s".format(
+        logger.warning("[{}]-{} on request to {}".format(
                                                     response.status_code,
                                                     response_data['status']['error_message'],
                                                     response.url
@@ -57,4 +57,4 @@ def _call(endpoint: str, payload: dict) -> requests.Response:
         }
     
 
-    return requests.get(BASE_URL + endpoint, headers=headers, params=payload)   # no need to retrun json here
+    return requests.get(BASE_URL + endpoint, headers=headers, params=payload)
