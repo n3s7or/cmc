@@ -1,14 +1,12 @@
 import services.endpoints
-from pprint import pprint
 
 
 def main():    
-    id_arr = [1, 2, 8]  # random ids (BTC, LTC, NMC) NMC? namecoin
+    id_arr = [1, 2, 2781]  # ids (BTC, LTC, USD)
 
-    res = services.endpoints.quotes(id_arr)
-    
-    pprint(res)
-   
+    print(services.endpoints.get_prices(id_arr))
+    # print(services.endpoints.get_crypto_data(id_arr))
+
 
 if __name__ == "__main__":
     main()

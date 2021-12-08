@@ -5,7 +5,7 @@ from requests.exceptions import RequestException, ConnectionError, Timeout
 from settings import logger, BASE_URL, API_KEY
 
 
-def check_cmc_status(response: requests.Response):
+def _check_cmc_status(response: requests.Response):
     response_data = response.json()
 
     if response.status_code == requests.codes.too_many_requests:
@@ -28,7 +28,7 @@ def check_cmc_status(response: requests.Response):
 
 @backoff.on_predicate(                                                  # Check if we hit any 4XX or 500 error
                     backoff.constant, 
-                    check_cmc_status,
+                    _check_cmc_status,
                     max_tries=3,
                     jitter=backoff.random_jitter,
                     interval=4,
