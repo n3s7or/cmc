@@ -1,6 +1,6 @@
 import backoff
 from settings import logger
-from . import _call
+from services import _call
 
 
 def quotes(id_arr: list) -> list:
