@@ -1,5 +1,29 @@
-from services.endpoints import cryptocurrency
+import requests
+from requests import codes
+from services.cmc import cryptocurrency
 from settings import logger
+
+
+def check_cmc_status(response: requests.Response):
+    response_data = response.json()
+
+    if response.status_code == codes.too_many_requests:
+        logger.info("[%s]-%s on request to %s".format(
+                                                    response.status_code,
+                                                    response_data['status']['error_message'],
+                                                    response.url
+                                                    ))
+        return True
+
+    if response.status_code in [codes.bad, codes.unauthorized, codes.payment_required,
+                                codes.forbidden, codes.server_error]:
+        logger.warning("[{}]-{} on request to {}".format(
+                                                    response.status_code,
+                                                    response_data['status']['error_message'],
+                                                    response.url
+                                                    ))
+
+    return False
 
 
 def _select_records_from_quote(data: dict, fields: list) -> list:
