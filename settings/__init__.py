@@ -16,7 +16,7 @@ logger.addHandler(sh)
 logger.setLevel(logging.INFO)
 
 
-API_KEY = os.environ.get('HX_CMC_APIKEY')
+API_KEY = os.environ.get('HX_CMC_APIKEY') if not os.environ.get('HX_CMC_TEST') else 'fake_api_key_that_rocks'
 
 if not API_KEY:
     logger.critical('No API KEY provided. You must ensure `HX_CMC_APIKEY` environment variable is set')

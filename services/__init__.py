@@ -19,7 +19,7 @@ from .cmc import check_cmc_status
                     max_tries=3,                                        # self explanatory
                     logger=logger
                     )
-def _call(endpoint: str, payload: dict) -> requests.Response:
+def call(endpoint: str, payload: dict) -> requests.Response:
     """Creates HTTP requests
     
     This function will retry three times if any of the following

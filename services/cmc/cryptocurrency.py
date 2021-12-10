@@ -1,4 +1,4 @@
-from services import _call
+import services
 
 
 def quotes(payload: dict) -> dict:
@@ -10,4 +10,4 @@ def quotes(payload: dict) -> dict:
         payload: filters/parameters
     """
 
-    return _call('/v1/cryptocurrency/quotes/latest', payload=payload).json()    
+    return services.call('/v1/cryptocurrency/quotes/latest', payload=payload).json()

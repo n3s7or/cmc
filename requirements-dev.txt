@@ -1,0 +1,4 @@
+requests==2.26.0
+backoff==1.11.1
+coverage==6.2
+responses==0.16.0
