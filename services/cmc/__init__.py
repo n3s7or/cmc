@@ -1,10 +1,10 @@
-import requests
-from requests import codes
+import httpx
+from httpx import codes
 from services.cmc import cryptocurrency
 from settings import logger
 
 
-def check_cmc_status(response: requests.Response):
+def check_cmc_status(response: httpx.Response):
     response_data = response.json()
 
     if response.status_code == codes.too_many_requests:
@@ -15,9 +15,9 @@ def check_cmc_status(response: requests.Response):
                                                     ))
         return True
 
-    if response.status_code in [codes.bad, codes.unauthorized, codes.payment_required,
-                                codes.forbidden, codes.server_error]:
-        logger.warning("[{}]-{} on request to {}".format(
+    if response.status_code in [codes.BAD_REQUEST, codes.UNAUTHORIZED, codes.PAYMENT_REQUIRED,
+                                codes.FORBIDDEN, codes.INTERNAL_SERVER_ERROR]:
+        logger.warning("[{}] - {} on request to {}".format(
                                                     response.status_code,
                                                     response_data['status']['error_message'],
                                                     response.url

@@ -1,6 +1,6 @@
 import backoff
-import requests
-from requests.exceptions import RequestException, ConnectionError, Timeout
+import httpx
+from httpx import TimeoutException, NetworkError
 from settings import logger, BASE_URL, API_KEY
 from .cmc import check_cmc_status
 
@@ -14,12 +14,12 @@ from .cmc import check_cmc_status
                     logger=logger
                     )
 @backoff.on_exception(backoff.expo,
-                    (RequestException, ConnectionError, Timeout),       # retry for any of those errors
+                    (NetworkError, TimeoutException),       # retry for any of those errors
                     max_time=30,                                        # max wait 30 seconds
                     max_tries=3,                                        # self explanatory
                     logger=logger
                     )
-def call(endpoint: str, payload: dict) -> requests.Response:
+def call(endpoint: str, payload: dict) -> httpx.Response:
     """Creates HTTP requests
     
     This function will retry three times if any of the following
@@ -35,4 +35,4 @@ def call(endpoint: str, payload: dict) -> requests.Response:
         'X-CMC_PRO_API_KEY': API_KEY
         }
 
-    return requests.get(BASE_URL + endpoint, headers=headers, params=payload)
+    return httpx.get(BASE_URL + endpoint, headers=headers, params=payload)
