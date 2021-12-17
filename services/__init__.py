@@ -36,6 +36,8 @@ async def call(endpoint: str, payload: dict) -> httpx.Response:
         }
 
     aclient = httpx.AsyncClient()
-    res = await aclient.get(BASE_URL + endpoint, headers=headers, params=payload)
-    await aclient.aclose()
-    return res
+    try:
+        res = await aclient.get(BASE_URL + endpoint, headers=headers, params=payload)
+        return res
+    finally:
+        await aclient.aclose()
