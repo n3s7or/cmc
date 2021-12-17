@@ -19,7 +19,7 @@ from .cmc import check_cmc_status
                     max_tries=3,                                        # self explanatory
                     logger=logger
                     )
-def call(endpoint: str, payload: dict) -> httpx.Response:
+async def call(endpoint: str, payload: dict) -> httpx.Response:
     """Creates HTTP requests
     
     This function will retry three times if any of the following
@@ -35,4 +35,7 @@ def call(endpoint: str, payload: dict) -> httpx.Response:
         'X-CMC_PRO_API_KEY': API_KEY
         }
 
-    return httpx.get(BASE_URL + endpoint, headers=headers, params=payload)
+    aclient = httpx.AsyncClient()
+    res = await aclient.get(BASE_URL + endpoint, headers=headers, params=payload)
+    await aclient.aclose()
+    return res

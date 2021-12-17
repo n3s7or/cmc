@@ -39,7 +39,7 @@ def _select_records_from_quote(data: dict, fields: list) -> list:
     return res
 
 
-def get_crypto_data(id_arr: list) -> list:
+async def get_crypto_data(id_arr: list) -> list:
     """Returns the latest prices, percent change and cap for 1 or more (crypto)currencies
 
     Args:
@@ -47,7 +47,7 @@ def get_crypto_data(id_arr: list) -> list:
     """
 
     payload = {'id': ','.join(map(lambda i: str(i), id_arr))}
-    json_response = cryptocurrency.quotes(payload)
+    json_response = await cryptocurrency.quotes(payload)
     res = []
 
     if 'data' not in json_response:
@@ -63,7 +63,7 @@ def get_crypto_data(id_arr: list) -> list:
         ])
 
 
-def get_prices(id_arr: list):
+async def get_prices(id_arr: list):
     """Returns the latest prices USD based for 1 or more (crypto)currencies
 
     Args:
@@ -71,7 +71,7 @@ def get_prices(id_arr: list):
     """
 
     payload = {'id': ','.join(map(lambda i: str(i), id_arr))}
-    json_response = cryptocurrency.quotes(payload)
+    json_response = await cryptocurrency.quotes(payload)
 
     res = []
 
