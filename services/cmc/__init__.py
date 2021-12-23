@@ -94,3 +94,17 @@ async def get_fiat_map() -> list:
         return []
 
     return json_response.get('data')
+
+
+async def get_cryptocurrency_map() -> list:
+    """Returns a mapping of all cryptocurrencies to unique CoinMarketCap ids"""
+
+    # Todo: maybe implement pagination
+
+    json_response = await cryptocurrency.map_()
+
+    if 'data' not in json_response:
+        logger.info('Returning empty list, probably error while fetching data')
+        return []
+
+    return json_response.get('data')
