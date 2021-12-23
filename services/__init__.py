@@ -19,16 +19,19 @@ from .cmc import check_cmc_status
                     max_tries=3,                                        # self explanatory
                     logger=logger
                     )
-async def call(endpoint: str, payload: dict) -> httpx.Response:
+async def call(endpoint: str, payload: dict = None) -> httpx.Response:
     """Creates HTTP requests
     
     This function will retry three times if any of the following
-    exceptions occur (RequestException, ConnectionError, Timeout)
+    exceptions occur (NetworkError, TimeoutException)
     
     Arguments:
     endpoint : str  -- coinmarketcap endpoint to request
     payload  : dict -- url parameters
     """
+    if payload is None:
+        payload = {}
+
     headers = {
         'Accept': 'application/json',
         'Accept-Encoding': 'deflate, gzip',

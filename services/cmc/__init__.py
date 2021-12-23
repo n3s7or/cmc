@@ -1,6 +1,6 @@
 import httpx
 from httpx import codes
-from services.cmc import cryptocurrency
+from services.cmc import cryptocurrency, fiat
 from settings import logger
 
 
@@ -80,3 +80,17 @@ async def get_prices(id_arr: list):
         return res
 
     return _select_records_from_quote(json_response, ['price'])
+
+
+async def get_fiat_map() -> list:
+    """Returns a mapping of all supported fiat currencies to unique CoinMarketCap ids"""
+
+    # Todo: maybe implement pagination
+
+    json_response = await fiat.map_()
+
+    if 'data' not in json_response:
+        logger.info('Returning empty list, probably error while fetching data')
+        return []
+
+    return json_response.get('data')
